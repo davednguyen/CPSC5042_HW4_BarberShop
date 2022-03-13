@@ -18,9 +18,7 @@ semaphore customers = 0;
 semaphore barbers = 0;
 semaphore cutting = 0;
 pthread_mutex_t mutexs =0;
-
-
-int customer1 = 0;
+int customer = 0;
 
 //start hair cut
 void perform_hair_cut(){
@@ -36,13 +34,14 @@ void request_haircut(){
 }
 
 
-//Barber function use to process
+//Barber function use to processs
+
 // let customers in for hair cut
 void Barber(){
     while(true) {
         wait(customers);
         wait(mutexs);
-        customer1 = customer1 - 1;
+        customer = customer - 1;
         signal(barbers);
         signal(mutexs);
         //start doing hair cut for customers
@@ -55,7 +54,7 @@ void Barber(){
 void Customer(int n) {
     wait(mutexs); //mutex for getting customers
     if (customers < n) {
-        customer1 = customer1 + 1; //update customer list
+        customer = customer + 1; //update customer list
         signal(customers); //alert customers
         signal(mutexs);
         wait(barbers); //wait for available barber
